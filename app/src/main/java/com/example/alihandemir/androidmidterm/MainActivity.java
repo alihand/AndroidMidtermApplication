@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.alihandemir.androidmidterm.R.id;
@@ -63,38 +64,11 @@ public class MainActivity extends AppCompatActivity implements ItemAdapter.OnIte
         setContentView(layout.activity_main);
 
         mRecyclerView = findViewById(id.recycler_view);
-
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),AppDatabase.class,"my_db")
-                .allowMainThreadQueries()
-                .build();
-
-         db.itemDao().getAllUsers();
-
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mItemList = new List<ItemDetail>();
+        mItemList = new ArrayList<ItemDetail>();
 
         mRequestQueue = Volley.newRequestQueue(this);
-
-
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                int position = viewHolder.getAdapterPosition();
-                mItemAdapter.removeItem(position);
-
-                Toast.makeText(MainActivity.this,
-                        "Item Deleted", Toast.LENGTH_LONG)
-                        .show();
-
-            }
-        }).attachToRecyclerView(mRecyclerView);
 
         parseJSON();
     }
